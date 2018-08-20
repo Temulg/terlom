@@ -1,34 +1,32 @@
 plugins {
-        id 'java'
-        id 'eclipse'
+	id 'java'
+	id 'eclipse'
 }
 
 repositories {
-        mavenLocal()
-        mavenCentral()
+	mavenLocal()
+	mavenCentral()
 }
 
 dependencies {
-        compile 'com.beust:jcommander:1.72'
-
-        testCompile 'org.testng:testng:6.14.3'
+	compile 'com.beust:jcommander:1.72'
+	compile 'org.openjfx:javafx-graphics:11-ea+19'
 }
 
 eclipse {
-        classpath {
-                downloadSources = true
-                downloadJavadoc = true
-        }
+	classpath {
+		downloadSources = true
+		downloadJavadoc = true
+	}
 }
 
 jar {
-        manifest {
-                attributes 'Main-Class': 'teolg.terlom.Application'
-        }
+	manifest {
+		attributes 'Main-Class': 'temulg.terlom.Application'
+	}
 }
 
-test {
-        useTestNG()
-        outputs.upToDateWhen { false }
-        testLogging.showStandardStreams = true
+task runMe(type: JavaExec) {
+	main = "temulg.terlom.Application"
+	classpath = sourceSets.test.runtimeClasspath
 }
