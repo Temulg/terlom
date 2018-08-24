@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.TreeItem?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TreeView
+ xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1"
+ fx:controller="temulg.terlom.ui.ActionTree"
+ fx:id="actionTree"
+ showRoot="false"
+ editable="false"
+ AnchorPane.topAnchor="0.0"
+ AnchorPane.bottomAnchor="0.0"
+ AnchorPane.leftAnchor="0.0"
+ AnchorPane.rightAnchor="0.0"
+>
+ <root>
+  <TreeItem
+   expanded="true" fx:id="treeRoot"
+  />
+ </root>
+ <contextMenu>
+  <ContextMenu fx:id="actionMenu">
+   <items>
+    <MenuItem text="New group" onAction="#createNewGroup"/>
+   </items>
+  </ContextMenu>
+ </contextMenu>
+</TreeView>

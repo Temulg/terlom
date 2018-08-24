@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.TreeItem?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<SplitPane
+ xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1"
+ fx:controller="temulg.terlom.ui.MainFrame"
+ dividerPositions="0.2"
+>
+ <items>
+  <AnchorPane>
+   <children>
+    <fx:include fx:id="actionTree" source="ActionTree.fxml"/>
+   </children>
+  </AnchorPane>
+  <AnchorPane fx:id="contentFrame"/>
+ </items>
+</SplitPane>

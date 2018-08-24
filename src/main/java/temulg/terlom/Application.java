@@ -6,13 +6,10 @@
 
 package temulg.terlom;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import temulg.terlom.ui.MainFrame;
 
 public class Application extends javafx.application.Application {
 	public static void main(String... args) {
@@ -20,27 +17,25 @@ public class Application extends javafx.application.Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Hello World!");
-		Button btn = new Button();
-		btn.setText("Say 'Hello World'");
-		btn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				System.out.println("Hello World!");
-				Screen screen = Screen.getPrimary();
-				double dpi = screen.getDpi();
-				double scaleX = screen.getOutputScaleX();
-				double scaleY = screen.getOutputScaleY();
-
-				System.out.format("DPI: %g, xs %g, ys %g\n", dpi, scaleX, scaleY);
-
-			}
-		});
-
-		StackPane root = new StackPane();
-		root.getChildren().add(btn);
-		primaryStage.setScene(new Scene(root, 300, 250));
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("Terlom");
+		primaryStage.setScene(new Scene(
+			MainFrame.load(this), 1024, 768
+		));
 		primaryStage.show();
+	}
+
+	void queryScreens() {
+		var gs = Screen.getScreens();
+		for (var s: gs) {
+			double dpi = s.getDpi();
+			double scaleX = s.getOutputScaleX();
+			double scaleY = s.getOutputScaleY();
+
+			System.out.format(
+				"-- screen %s: dpi %g, sx %g, sy %g\n",
+				s, dpi, scaleX, scaleY
+			);
+		}
 	}
 }
