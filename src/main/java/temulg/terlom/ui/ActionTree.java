@@ -22,10 +22,6 @@ public class ActionTree implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 	}
 
-	void attachApp(Application app_) {
-		app = app_;
-	}
-
 	@FXML
 	private void createNewGroup(ActionEvent e) {
 		System.out.format("-- New group %s\n", e);
@@ -34,12 +30,10 @@ public class ActionTree implements Initializable {
 		treeRoot.getChildren().add(ti);
 	}
 
-	private Application app;
-
 	@FXML
-	private TreeView actionTree;
+	TreeView actionTree;
 	@FXML
-	private TreeItem<Object> treeRoot;
+	TreeItem<Object> treeRoot;
 	@FXML
-	private ContextMenu actionMenu;
+	ContextMenu actionMenu;
 }

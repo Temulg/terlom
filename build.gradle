@@ -11,6 +11,7 @@ repositories {
 dependencies {
 	compile 'com.beust:jcommander:1.72'
 	compile 'org.openjfx:javafx-graphics:11-ea+19'
+	compile 'com.h2database:h2-mvstore:1.4.197'
 }
 
 eclipse {
@@ -29,4 +30,10 @@ jar {
 task runMe(type: JavaExec) {
 	main = "temulg.terlom.Application"
 	classpath = sourceSets.test.runtimeClasspath
+
+	if (org.gradle.internal.os.OperatingSystem.current().isLinux()) {
+		systemProperties([
+			'jdk.gtk.version': '3'
+		])
+	}
 }

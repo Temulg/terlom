@@ -6,10 +6,9 @@
 
 package temulg.terlom;
 
-import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import temulg.terlom.ui.MainFrame;
+import temulg.terlom.ui.Container;
 
 public class Application extends javafx.application.Application {
 	public static void main(String... args) {
@@ -18,10 +17,8 @@ public class Application extends javafx.application.Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primaryStage.setTitle("Terlom");
-		primaryStage.setScene(new Scene(
-			MainFrame.load(this), 1024, 768
-		));
+		ui = new Container(this, primaryStage);
+
 		primaryStage.show();
 	}
 
@@ -38,4 +35,6 @@ public class Application extends javafx.application.Application {
 			);
 		}
 	}
+
+	private Container ui;
 }
