@@ -11,7 +11,7 @@
  fx:controller="temulg.terlom.ui.ActionTree"
  fx:id="actionTree"
  showRoot="false"
- editable="false"
+ editable="true"
  AnchorPane.topAnchor="0.0"
  AnchorPane.bottomAnchor="0.0"
  AnchorPane.leftAnchor="0.0"

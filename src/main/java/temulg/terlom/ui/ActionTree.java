@@ -13,27 +13,39 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import temulg.terlom.Application;
+import javafx.scene.control.cell.TextFieldTreeCell;
 
 public class ActionTree implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		actionTree.setCellFactory(this::onActionTreeEdit);
 	}
 
 	@FXML
 	private void createNewGroup(ActionEvent e) {
 		System.out.format("-- New group %s\n", e);
-		var ti = new TreeItem<Object>();
-		ti.setValue("Group");
+		var ti = new TreeItem<ActionTreeValue>();
+		ti.setValue(new ConnGroup());
+
 		treeRoot.getChildren().add(ti);
+		actionTree.edit(ti);
+	}
+
+	private TreeCell<ActionTreeValue> onActionTreeEdit(
+		TreeView<ActionTreeValue> tree	
+	) {
+		var cell = new ActionTreeCell();
+		cell.setEditable(true);
+		return cell;
 	}
 
 	@FXML
-	TreeView actionTree;
+	TreeView<ActionTreeValue> actionTree;
 	@FXML
-	TreeItem<Object> treeRoot;
+	TreeItem<ActionTreeValue> treeRoot;
 	@FXML
 	ContextMenu actionMenu;
 }
