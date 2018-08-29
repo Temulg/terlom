@@ -6,86 +6,116 @@
 
 package temulg.terlom.ui;
 
-import javafx.scene.Node;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
+import java.lang.ref.WeakReference;
 
-public class ActionTreeCell extends DefaultTreeCell {
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.WeakInvalidationListener;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
+
+public class ActionTreeCell extends TreeCell<ActionTreeValue> {
 	public ActionTreeCell() {
+		treeItemProperty().addListener(weakTreeItemListener);
+
+		if (getTreeItem() != null) {
+			getTreeItem().graphicProperty().addListener(
+				weakTreeItemGraphicListener
+			);
+		}
+
 		getStyleClass().add("text-field-tree-cell");
 	}
 
 	@Override
 	public void startEdit() {
+		/*
+		for (var f: Thread.currentThread().getStackTrace())
+			System.out.println(f);
+*/
 		if (!isEditable() || !getTreeView().isEditable())
 			return;
 
 		super.startEdit();
 
 		if (isEditing()) {
-			if (textField == null)
-				createTextField();
-
-			textField.setText(itemText());
 			setText(null);
-			setGraphic(textField);
-
-			textField.selectAll();
-			textField.requestFocus();
+			setGraphic(getItem().editableNode(this));
+			getItem().startEdit();
 		}
-	}
-
-	private String itemText() {
-		return ((Labeled)getItem().visibleNode()).getText();
-	}
-
-	private ActionTreeValue setItemText(String value) {
-		((Labeled)getItem().visibleNode()).setText(value);
-		return getItem();
-	}
-
-	private void createTextField() {
-		textField = new TextField(itemText());
-
-		textField.setOnAction(event -> {
-			commitEdit(setItemText(
-				textField.getText()
-			));
-			event.consume();
-		});
-		textField.setOnKeyReleased(t -> {
-			if (t.getCode() == KeyCode.ESCAPE) {
-				cancelEdit();
-				t.consume();
-			}
-		});
 	}
 
 	@Override
 	public void cancelEdit() {
+		getItem().cancelEdit();
+		setGraphic(getItem().visibleNode());
 		super.cancelEdit();
 	}
 
 	@Override
-	public void updateItem(ActionTreeValue item, boolean empty) {
-		super.updateItem(item, empty);
+	public void commitEdit(ActionTreeValue newValue) {
+		newValue.commitEdit();
+		super.commitEdit(newValue);
+	}
 
-		if (isEmpty()) {
+	private void updateDisplay(ActionTreeValue item, boolean empty) {
+		System.out.format("-- update %s\n", item);
+
+		if (empty) {
 			setGraphic(null);
 		} else {
 			if (isEditing()) {
-				if (textField != null)
-					textField.setText(itemText());
-
-				setGraphic(textField);
+				setGraphic(item.editableNode(this));
 			} else {
 				setGraphic(item.visibleNode());
 			}
 		}
 	}
 
-	private TextField textField;
+	@Override
+	public void updateItem(ActionTreeValue item, boolean empty) {
+		super.updateItem(item, empty);
+		updateDisplay(item, empty);
+
+	}
+
+	private WeakReference<TreeItem<ActionTreeValue>> treeItemRef;
+
+	private final InvalidationListener treeItemGraphicListener
+	= observable -> {
+		updateDisplay(getItem(), isEmpty());
+	};
+
+	private final InvalidationListener treeItemListener
+	= new InvalidationListener() {
+		@Override
+		public void invalidated(Observable observable) {
+			TreeItem<ActionTreeValue> oldTreeItem
+				= treeItemRef == null
+				? null : treeItemRef.get();
+
+			if (oldTreeItem != null)
+				oldTreeItem.graphicProperty().removeListener(
+					weakTreeItemGraphicListener
+				);
+
+    
+			TreeItem<ActionTreeValue> newTreeItem = getTreeItem();
+
+			if (newTreeItem != null) {
+				newTreeItem.graphicProperty().addListener(
+					weakTreeItemGraphicListener
+				);
+				treeItemRef = new WeakReference<
+					TreeItem<ActionTreeValue>
+				>(newTreeItem);
+			}
+		}
+	};
+
+	private WeakInvalidationListener weakTreeItemGraphicListener
+		= new WeakInvalidationListener(treeItemGraphicListener);
+
+	private WeakInvalidationListener weakTreeItemListener
+		= new WeakInvalidationListener(treeItemListener);
 }

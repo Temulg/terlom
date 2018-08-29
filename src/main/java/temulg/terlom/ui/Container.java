@@ -6,6 +6,7 @@
 
 package temulg.terlom.ui;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -34,6 +35,7 @@ public class Container {
 
 		});
 */
+
 		stage.setWidth(1500);
 		stage.setHeight(1000);
 		stage.setScene(s);

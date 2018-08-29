@@ -7,7 +7,14 @@
 package temulg.terlom.ui;
 
 import javafx.scene.Node;
+import javafx.scene.control.TreeCell;
 
 interface ActionTreeValue {
 	Node visibleNode();
+
+	Node editableNode(TreeCell<ActionTreeValue> cell);
+
+	void startEdit();
+	void cancelEdit();
+	void commitEdit();
 }

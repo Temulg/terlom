@@ -9,8 +9,11 @@ package temulg.terlom.ui;
 import javafx.scene.AccessibleRole;
 import javafx.scene.Node;
 import javafx.scene.control.Labeled;
-import javafx.scene.control.Skin;
-import javafx.scene.control.skin.LabeledSkinBase;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 class ConnGroup extends Labeled implements ActionTreeValue {
 	@Override
@@ -18,25 +21,70 @@ class ConnGroup extends Labeled implements ActionTreeValue {
 		return visibleNode;
 	}
 
-	private class VisibleNode extends Labeled {
+	@Override
+	public Node editableNode(TreeCell<ActionTreeValue> cell) {
+		if (editableNode == null)
+			editableNode = new EditableNode(cell);
+
+		return editableNode;
+	}
+
+	@Override
+	public void startEdit() {
+		if (editableNode != null) {
+			editableNode.selectAll();
+			editableNode.requestFocus();
+		}
+	}
+
+	@Override
+	public void cancelEdit() {
+		editableNode = null;
+	}
+
+	@Override
+	public void commitEdit() {
+		editableNode = null;
+	}
+
+	private class VisibleNode extends HBox {
 		VisibleNode() {
-			super("New group");
+			text = new Text("New Group");
+			getChildren().add(text);
 			getStyleClass().setAll("label");
 			setAccessibleRole(AccessibleRole.TEXT);	
 		}
 
-		@Override
-		protected Skin<?> createDefaultSkin() {
-			return new VisibleNodeSkin(this);
-		}	
+		private String getText() {
+			return text.getText();
+		}
+
+		private void setText(String s) {
+			text.setText(s);
+		}
+
+		private final Text text;
 	}
 
-	private static class VisibleNodeSkin
-	extends LabeledSkinBase<VisibleNode> {
-		private VisibleNodeSkin(final VisibleNode control) {
-			super(control);
+	private class EditableNode extends TextField {
+		EditableNode(TreeCell<ActionTreeValue> cell) {
+			super(visibleNode.getText());
+
+			setOnAction(event -> {
+				visibleNode.setText(getText());
+				cell.commitEdit(ConnGroup.this);
+				event.consume();
+			});
+
+			setOnKeyReleased(t -> {
+				if (t.getCode() == KeyCode.ESCAPE) {
+					cell.cancelEdit();
+					t.consume();
+				}
+			});
 		}
 	}
 
 	private final VisibleNode visibleNode = new VisibleNode();
+	private EditableNode editableNode;
 }
