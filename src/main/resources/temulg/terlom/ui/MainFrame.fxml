@@ -4,6 +4,7 @@
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.control.TreeItem?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import temulg.terlom.ui.ResizableCanvas?>
 
 <SplitPane
  xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1"
@@ -16,6 +17,15 @@
     <fx:include fx:id="actionTree" source="ActionTree.fxml"/>
    </children>
   </AnchorPane>
-  <AnchorPane fx:id="contentFrame"/>
+  <AnchorPane fx:id="contentFrame">
+   <children>
+    <ResizableCanvas fx:id="testCanvas"
+     AnchorPane.topAnchor="0.0"
+     AnchorPane.bottomAnchor="0.0"
+     AnchorPane.leftAnchor="0.0"
+     AnchorPane.rightAnchor="0.0"
+    />
+   </children>
+  </AnchorPane>
  </items>
 </SplitPane>

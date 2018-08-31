@@ -59,8 +59,6 @@ public class ActionTreeCell extends TreeCell<ActionTreeValue> {
 	}
 
 	private void updateDisplay(ActionTreeValue item, boolean empty) {
-		System.out.format("-- update %s\n", item);
-
 		if (empty) {
 			setGraphic(null);
 		} else {

@@ -17,9 +17,10 @@ import javafx.scene.layout.AnchorPane;
 public class MainFrame implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		for (var d: mainFrame.getDividerPositions()) {
-			System.out.format("-- div %g\n", d);
-		}
+		//testCanvas.widthProperty().bind(contentFrame.widthProperty());
+		/*testCanvas.heightProperty().bind(
+			contentFrame.heightProperty()
+		);*/
 	}
 
 	@FXML
@@ -28,4 +29,6 @@ public class MainFrame implements Initializable {
 	ActionTree actionTreeController;
 	@FXML
 	AnchorPane contentFrame;
+	@FXML
+	ResizableCanvas testCanvas;
 }

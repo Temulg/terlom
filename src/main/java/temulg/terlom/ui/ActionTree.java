@@ -24,7 +24,6 @@ public class ActionTree implements Initializable {
 			cell.setEditable(true);
 			return cell;
 		});
-		System.out.format("-- sc %s\n", actionTree.getScene());
 	}
 
 	@FXML
@@ -33,9 +32,7 @@ public class ActionTree implements Initializable {
 		ti.setValue(new ConnGroup());
 
 		treeRoot.getChildren().add(ti);
-		actionTree.layout();
 		actionTree.edit(ti);
-		System.out.format("-- New group %s\n", ti);
 	}
 
 	@FXML

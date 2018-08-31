@@ -62,4 +62,16 @@ task runMe(type: JavaExec, dependsOn: 'jar') {
 		'--add-modules', 'ALL-MODULE-PATH', '-jar',
 		jar.outputs.files.getFiles()[0]
 	]
+	systemProperties([
+		//'jdk.gtk.version': '3',
+		//'glass.gtk.uiScale': '2'
+		//'prism.showoverdraw': 'true'
+		//'prism.printrendergraph': 'true'
+		//'prism.verbose': 'true',
+		//'prism.printStats': 'true',
+		//'prism.debug': 'true',
+		//'prism.trace': 'true'
+	])
+	standardOutput = System.out
+	errorOutput = System.err
 }
