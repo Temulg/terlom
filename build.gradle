@@ -8,16 +8,44 @@ repositories {
 	mavenCentral()
 }
 
+version=1.0
+ext.platform = org.gradle.internal.os.OperatingSystem.current().getFamilyName()
+ext.openjfxVersion = '11-ea+25'
+
 dependencies {
-	compile 'com.beust:jcommander:1.72'
-	compile 'org.openjfx:javafx-graphics:11-ea+19'
-	compile 'com.h2database:h2-mvstore:1.4.197'
+	//compile 'com.beust:jcommander:1.72'
+	compile "org.openjfx:javafx-base:${openjfxVersion}:${platform}"
+	compile "org.openjfx:javafx-controls:${openjfxVersion}:${platform}"
+	compile "org.openjfx:javafx-graphics:${openjfxVersion}:${platform}"
+	compile "org.openjfx:javafx-fxml:${openjfxVersion}:${platform}"
+	//compile 'com.h2database:h2-mvstore:1.4.198'
+}
+
+ext.moduleName = 'terlom' 
+
+compileJava {
+	inputs.property("moduleName", moduleName)
+	doFirst {
+		options.compilerArgs = [
+			'--module-path', classpath.asPath,
+		]
+	}
 }
 
 eclipse {
 	classpath {
 		downloadSources = true
 		downloadJavadoc = true
+		file {
+			whenMerged { cp ->
+				cp.entries.each { e ->
+					if (e instanceof org.gradle.plugins.ide.eclipse.model.Library) {
+						def l = (org.gradle.plugins.ide.eclipse.model.Library)e
+						l.entryAttributes['module'] = true
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -27,13 +55,11 @@ jar {
 	}
 }
 
-task runMe(type: JavaExec) {
-	main = "temulg.terlom.Application"
-	classpath = sourceSets.test.runtimeClasspath
-
-	if (org.gradle.internal.os.OperatingSystem.current().isLinux()) {
-		systemProperties([
-			'jdk.gtk.version': '3'
-		])
-	}
+task runMe(type: JavaExec, dependsOn: 'jar') {
+	main = ''
+	jvmArgs = [
+		'--module-path', sourceSets.main.compileClasspath.asPath,
+		'--add-modules', 'ALL-MODULE-PATH', '-jar',
+		jar.outputs.files.getFiles()[0]
+	]
 }
